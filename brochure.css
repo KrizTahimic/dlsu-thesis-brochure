@@ -429,6 +429,11 @@ strong {
   max-width: 100%;
 }
 
+.figure-container.full-width img {
+  max-height: none;
+  width: 100%;
+}
+
 .figure-caption {
   font-size: 0.75rem;
   color: var(--medium);
@@ -498,12 +503,12 @@ strong {
 
 /* References */
 .references-list {
-  list-style: none;
-  margin: 6px 0;
+  list-style: decimal;
+  margin: 6px 0 6px 16px;
 }
 
 .references-list li {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   padding: 2px 0;
   color: var(--medium);
 }
