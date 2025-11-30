@@ -1,0 +1,771 @@
+/* ============================================
+   BROCHURE CSS - Technical Elegant Theme
+   ============================================ */
+
+/* CSS Variables */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #3b82f6;
+  --accent: #0891b2;
+  --accent-dark: #0e7490;
+  --accent-light: #06b6d4;
+  --dark: #1f2937;
+  --medium: #4b5563;
+  --light: #f3f4f6;
+  --lighter: #f9fafb;
+  --white: #ffffff;
+
+  /* Dimensions for Letter size tri-fold */
+  --page-width: 11in;
+  --page-height: 8.5in;
+  --panel-width: calc(var(--page-width) / 3);
+  --panel-padding: 0.35in;
+}
+
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--dark);
+  background: #e5e7eb;
+}
+
+/* Page Layout */
+.page {
+  width: var(--page-width);
+  height: var(--page-height);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--white);
+  margin: 20px auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  page-break-after: always;
+}
+
+/* Panel Base */
+.panel {
+  width: var(--panel-width);
+  height: var(--page-height);
+  padding: var(--panel-padding);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* OPTION C: Gradient mesh texture for content panels */
+.panel:not(.cover) {
+  background-color: var(--white);
+  background-image:
+    radial-gradient(ellipse at 10% 20%, rgba(37, 99, 235, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(8, 145, 178, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.02) 0%, transparent 70%);
+}
+
+/* Alternate panels get slightly different gradient positions */
+.panel-1, .panel-3, .panel-5 {
+  background-color: var(--lighter);
+  background-image:
+    radial-gradient(ellipse at 80% 30%, rgba(8, 145, 178, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 70%, rgba(37, 99, 235, 0.04) 0%, transparent 50%);
+}
+
+/* Bottom accent bar for non-cover panels */
+.panel:not(.cover)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+}
+
+/* Panel Headers */
+.panel-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+}
+
+.panel-header.teal {
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+}
+
+.panel-header .header-accent {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40px;
+  height: 20px;
+  background: var(--accent);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+.panel-header.teal .header-accent {
+  background: var(--primary);
+}
+
+/* Panel Content */
+.panel-content {
+  padding-top: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+/* Typography */
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  padding-left: 12px;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+  position: relative;
+}
+
+/* Small geometric accent before section title */
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 1px;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin: 10px 0 6px 0;
+}
+
+.result-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 10px 0 4px 0;
+}
+
+p {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  color: var(--medium);
+}
+
+.small-text {
+  font-size: 0.85rem;
+}
+
+strong {
+  color: var(--dark);
+  font-weight: 600;
+}
+
+/* Lists */
+.feature-list {
+  list-style: none;
+  margin: 8px 0;
+}
+
+.feature-list li {
+  font-size: 0.9rem;
+  padding: 4px 0 4px 16px;
+  position: relative;
+  color: var(--medium);
+}
+
+.feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.stat {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+.compact-list {
+  list-style: none;
+  margin: 6px 0;
+}
+
+.compact-list li {
+  font-size: 0.85rem;
+  padding: 2px 0 2px 12px;
+  position: relative;
+  color: var(--medium);
+}
+
+.compact-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.numbered-list {
+  margin: 8px 0 8px 20px;
+}
+
+.numbered-list li {
+  font-size: 0.9rem;
+  padding: 2px 0;
+  color: var(--medium);
+}
+
+.mini-list {
+  list-style: none;
+  margin: 4px 0;
+}
+
+.mini-list li {
+  font-size: 0.8rem;
+  padding: 2px 0 2px 10px;
+  position: relative;
+  color: var(--medium);
+}
+
+.mini-list li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+/* Boxes */
+.highlight-box {
+  background: linear-gradient(135deg, var(--light) 0%, var(--lighter) 100%);
+  border-left: 3px solid var(--primary);
+  padding: 10px 12px;
+  margin: 8px 0;
+  border-radius: 0 6px 6px 0;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+  position: relative;
+}
+
+/* Subtle corner accent */
+.highlight-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, transparent 50%, rgba(37, 99, 235, 0.1) 50%);
+}
+
+.highlight-box p {
+  font-size: 0.95rem;
+  margin: 0;
+  color: var(--dark);
+}
+
+.insight-box {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(8, 145, 178, 0.05) 100%);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative corner element */
+.insight-box::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(8, 145, 178, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.insight-box h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.insight-box p {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.discovery-box {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: var(--white);
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin: 8px 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.discovery-box p {
+  color: var(--white);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.discovery-box strong {
+  color: var(--white);
+}
+
+.first-box {
+  background: var(--light);
+  border-left: 3px solid var(--accent);
+  padding: 10px 12px;
+  border-radius: 0 6px 6px 0;
+  margin: 8px 0;
+}
+
+.first-box p {
+  font-size: 0.9rem;
+  margin: 0;
+  color: var(--dark);
+}
+
+/* Asymmetry Box */
+.asymmetry-box {
+  background: var(--light);
+  border-radius: 6px;
+  padding: 10px;
+  margin: 8px 0;
+}
+
+.asymmetry-box .found,
+.asymmetry-box .not-found {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.85rem;
+}
+
+.asymmetry-box .label {
+  font-weight: 600;
+  min-width: 70px;
+}
+
+.asymmetry-box .found .label {
+  color: var(--accent-dark);
+}
+
+.asymmetry-box .not-found .label {
+  color: var(--medium);
+}
+
+.insight-text {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--primary);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Figures */
+.figure-container {
+  margin: 8px 0;
+  text-align: center;
+}
+
+.figure-container img {
+  max-width: 100%;
+  height: auto;
+  max-height: 140px;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.figure-container.small img {
+  max-height: 110px;
+}
+
+.figure-container.medium img {
+  max-height: 260px;
+  max-width: 100%;
+}
+
+.figure-container.large img {
+  max-height: none;
+  max-width: 100%;
+}
+
+.figure-caption {
+  font-size: 0.75rem;
+  color: var(--medium);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* Tech Specs */
+.tech-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  background: var(--light);
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  padding: 2px 0;
+}
+
+.spec-label {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.spec-value {
+  color: var(--medium);
+}
+
+/* Evidence Grid */
+.evidence-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.evidence-item {
+  background: var(--lighter);
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--light);
+}
+
+.evidence-item h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+/* Applications List */
+.applications-list {
+  margin: 8px 0 8px 16px;
+}
+
+.applications-list li {
+  font-size: 0.85rem;
+  padding: 4px 0;
+  color: var(--medium);
+}
+
+/* References */
+.references-list {
+  list-style: none;
+  margin: 6px 0;
+}
+
+.references-list li {
+  font-size: 0.75rem;
+  padding: 2px 0;
+  color: var(--medium);
+}
+
+/* Contact Section */
+.contact-section {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--light);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-role {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.contact-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.contact-email {
+  font-size: 0.75rem;
+  color: var(--primary);
+}
+
+.institution {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--medium);
+  margin-top: 10px;
+}
+
+.institution .program {
+  font-size: 0.7rem;
+  color: var(--accent);
+}
+
+/* ============================================
+   COVER PANEL (Panel 6)
+   ============================================ */
+
+.panel.cover {
+  padding: 0;
+  background: linear-gradient(160deg, var(--dark) 0%, #111827 100%);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(37, 99, 235, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(8, 145, 178, 0.2) 0%, transparent 50%);
+}
+
+.geometric-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(30deg, var(--white) 12%, transparent 12.5%, transparent 87%, var(--white) 87.5%, var(--white)),
+    linear-gradient(150deg, var(--white) 12%, transparent 12.5%, transparent 87%, var(--white) 87.5%, var(--white)),
+    linear-gradient(30deg, var(--white) 12%, transparent 12.5%, transparent 87%, var(--white) 87.5%, var(--white)),
+    linear-gradient(150deg, var(--white) 12%, transparent 12.5%, transparent 87%, var(--white) 87.5%, var(--white));
+  background-size: 40px 70px;
+  background-position: 0 0, 0 0, 20px 35px, 20px 35px;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0.5in 0.4in;
+  text-align: center;
+}
+
+.cover-top {
+  flex: 0 0 auto;
+}
+
+.cover-title {
+  margin-bottom: 12px;
+}
+
+.title-line {
+  display: block;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.05;
+  background: linear-gradient(135deg, var(--white) 0%, rgba(255,255,255,0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.title-line-small {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: rgba(255,255,255,0.9);
+  margin-top: 10px;
+}
+
+.cover-subtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--accent-light);
+  margin-top: 8px;
+}
+
+/* Neural Network SVG */
+.cover-visual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.neural-network {
+  width: 180px;
+  height: auto;
+}
+
+.neural-network .node {
+  stroke: var(--white);
+  stroke-width: 1;
+}
+
+.neural-network .node.input {
+  fill: var(--primary);
+}
+
+.neural-network .node.hidden {
+  fill: var(--accent);
+}
+
+.neural-network .node.output {
+  fill: var(--primary-light);
+}
+
+.neural-network .connections line {
+  stroke: rgba(255,255,255,0.15);
+  stroke-width: 1;
+}
+
+.neural-network .direction-path {
+  stroke: var(--accent-light);
+  stroke-width: 3;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px var(--accent));
+}
+
+.neural-network .direction-label {
+  font-size: 8px;
+  fill: var(--accent-light);
+  text-anchor: middle;
+  font-style: italic;
+}
+
+.cover-bottom {
+  flex: 0 0 auto;
+}
+
+.author-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.adviser-name {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 16px;
+}
+
+.institution-badge {
+  display: inline-flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(4px);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 12px;
+}
+
+.institution-badge .college {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--white);
+}
+
+.institution-badge .university {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-light);
+}
+
+.academic-year {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .page {
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .cover-background,
+  .gradient-overlay,
+  .geometric-pattern {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@page {
+  size: 11in 8.5in landscape;
+  margin: 0;
+}

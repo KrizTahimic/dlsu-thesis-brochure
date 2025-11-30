@@ -1,0 +1,14 @@
+{
+  "name": "brochure-pdf-converter",
+  "version": "1.0.0",
+  "description": "Convert HTML brochure to PDF using Puppeteer",
+  "main": "convert-to-pdf.js",
+  "type": "module",
+  "scripts": {
+    "build": "node convert-to-pdf.js",
+    "preview": "open brochure.html"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}

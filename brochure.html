@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mechanistic Interpretability of Code Correctness in LLMs</title>
+  <link rel="stylesheet" href="brochure.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- PAGE 1: Inside panels (1-2-3) when opened -->
+  <div class="page page-inside">
+
+    <!-- Panel 1: Context & Problem -->
+    <section class="panel panel-1">
+      <div class="panel-header">
+        <div class="header-accent"></div>
+      </div>
+      <div class="panel-content">
+        <h2 class="section-title">Context</h2>
+        <p>AI-assisted coding has reached <strong>critical mass</strong>:</p>
+        <ul class="feature-list">
+          <li><span class="stat">30%</span> of GitHub Copilot suggestions enter production</li>
+          <li>Projected <span class="stat">$1.5T</span> GDP impact by 2030</li>
+          <li>LLMs deployed in critical systems worldwide</li>
+        </ul>
+
+        <h2 class="section-title">The Problem</h2>
+        <div class="highlight-box">
+          <p>We lack <strong>mechanistic understanding</strong> of WHEN and WHY models produce correct code.</p>
+        </div>
+        <ul class="compact-list">
+          <li>Models fail in bug-prone contexts (12.27% accuracy)</li>
+          <li>44% of LLM bugs mirror historical training bugs</li>
+          <li><strong>Stakes:</strong> Healthcare, banking, military</li>
+        </ul>
+
+        <h2 class="section-title">The Challenge</h2>
+        <p class="small-text"><strong>Polysemantic neurons:</strong> One neuron responds to multiple unrelated concepts</p>
+        <div class="figure-container">
+          <img src="figures/polysemantic neuron.png" alt="Polysemantic Neuron">
+          <p class="figure-caption">A single neuron activates for unrelated concepts</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 2: Approach -->
+    <section class="panel panel-2">
+      <div class="panel-header">
+        <div class="header-accent"></div>
+      </div>
+      <div class="panel-content">
+        <h2 class="section-title">Why Interpretation is Hard</h2>
+        <p><strong>Superposition:</strong> Networks compress more features than dimensions, entangling representations.</p>
+        <div class="figure-container">
+          <img src="figures/superposition.png" alt="Superposition">
+          <p class="figure-caption">Observed models are low-dimensional projections of larger networks</p>
+        </div>
+
+        <h2 class="section-title">Our Approach</h2>
+        <p><strong>Sparse Autoencoders (SAEs)</strong> decompose entangled representations into interpretable directions.</p>
+        <div class="figure-container">
+          <img src="figures/sae.png" alt="Sparse Autoencoder">
+          <p class="figure-caption">SAE: Activations → sparse latent space → reconstructed activations</p>
+        </div>
+
+        <h3 class="subsection-title">Technical Setup</h3>
+        <div class="tech-specs">
+          <div class="spec-item"><span class="spec-label">Model</span><span class="spec-value">Gemma-2 2B</span></div>
+          <div class="spec-item"><span class="spec-label">SAE</span><span class="spec-value">GemmaScope (16K latents)</span></div>
+          <div class="spec-item"><span class="spec-label">Dataset</span><span class="spec-value">MBPP (1K problems)</span></div>
+          <div class="spec-item"><span class="spec-label">Analysis</span><span class="spec-value">All layers, residual stream, final prompt token</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 3: Key Discovery -->
+    <section class="panel panel-3">
+      <div class="panel-header">
+        <div class="header-accent"></div>
+      </div>
+      <div class="panel-content">
+        <h2 class="section-title">Key Discovery</h2>
+        <div class="discovery-box">
+          <p><strong>Code correctness directions EXIST</strong> in LLM representations&mdash;and they are <strong>actionable</strong>.</p>
+        </div>
+
+        <h3 class="result-title">1. Predict Errors Before Generation</h3>
+        <p class="small-text">The <strong>incorrect-predicting direction</strong> detects errors with high accuracy:</p>
+        <div class="figure-container">
+          <img src="figures/incorrect-predicting.png" alt="Prediction Results">
+          <p class="figure-caption">F1: 0.821 for error detection&mdash;can serve as "error alarm"</p>
+        </div>
+
+        <h3 class="result-title">2. Steer Toward Correctness</h3>
+        <p class="small-text">The <strong>correct-steering direction</strong> can fix errors (4.04% of incorrect code fixed).</p>
+
+        <h3 class="result-title">3. Asymmetric Finding</h3>
+        <div class="asymmetry-box">
+          <div class="found">
+            <span class="label">Found:</span>
+            <span>incorrect-predicting + correct-steering</span>
+          </div>
+          <div class="not-found">
+            <span class="label">Not Found:</span>
+            <span>correct-predicting or incorrect-steering</span>
+          </div>
+        </div>
+        <p class="insight-text"><em>Models detect "wrongness" differently than they encode "correctness"</em></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- PAGE 2: Back panels (4-5-6) -->
+  <div class="page page-back">
+
+    <!-- Panel 4: Mechanistic Evidence -->
+    <section class="panel panel-4">
+      <div class="panel-header teal">
+        <div class="header-accent"></div>
+      </div>
+      <div class="panel-content">
+        <h2 class="section-title">Mechanistic Evidence</h2>
+        <div class="figure-container medium">
+          <img src="figures/methodology.png" alt="PCDGE Methodology">
+          <p class="figure-caption">PCDGE pipeline: Dataset preparation → Direction selection → Mechanistic analysis</p>
+        </div>
+
+        <div class="evidence-grid">
+          <div class="evidence-item">
+            <h4>Prediction Analysis</h4>
+            <ul class="mini-list">
+              <li>Incorrect-predicting: <strong>F1 = 0.821</strong></li>
+              <li>Correct-predicting: F1 = 0.504 (weak)</li>
+            </ul>
+          </div>
+          <div class="evidence-item">
+            <h4>Steering Interventions</h4>
+            <ul class="mini-list">
+              <li>Correct-steering fixes <strong>4.04%</strong> of errors</li>
+              <li>Trade-off: affects 14.66% correct code</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="small-text" style="margin-top: 8px;"><strong>Causal validation:</strong> Removing directions causes 83.62% corruption (vs. 18.97% control). Directions persist across instruction-tuning (F1: 0.821→0.772).</p>
+      </div>
+    </section>
+
+    <!-- Panel 5: Significance & Contact -->
+    <section class="panel panel-5">
+      <div class="panel-header teal">
+        <div class="header-accent"></div>
+      </div>
+      <div class="panel-content">
+        <h2 class="section-title">Significance</h2>
+        <div class="first-box">
+          <p><strong>First application</strong> of Sparse Autoencoders to study code correctness mechanisms in LLMs.</p>
+        </div>
+
+        <h3 class="subsection-title">Practical Applications</h3>
+        <ol class="applications-list">
+          <li><strong>Prompting strategies:</strong> Prioritize test examples over problem descriptions</li>
+          <li><strong>Error alarms:</strong> Predictor directions flag code for review</li>
+          <li><strong>Selective steering:</strong> Intervene only when errors anticipated</li>
+        </ol>
+
+        <p class="small-text"><strong>Safety Implications:</strong> Contributes to safer AI deployment in healthcare, finance, and critical infrastructure.</p>
+
+        <h3 class="subsection-title">Key References</h3>
+        <ul class="references-list">
+          <li>Bricken et al. (2023) &mdash; Towards Monosemanticity</li>
+          <li>Templeton et al. (2024) &mdash; Scaling Monosemanticity</li>
+          <li>Lieberum et al. (2024) &mdash; GemmaScope</li>
+          <li>Ferrando et al. (2024) &mdash; Entity Recognition via SAEs</li>
+        </ul>
+
+        <div class="contact-section">
+          <h3 class="subsection-title">Contact</h3>
+          <div class="contact-grid">
+            <div class="contact-item">
+              <span class="contact-role">Proponent</span>
+              <span class="contact-name">Kriz Tahimic</span>
+              <span class="contact-email">kriz_tahimic@dlsu.edu.ph</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-role">Adviser</span>
+              <span class="contact-name">Dr. Charibeth K. Cheng</span>
+              <span class="contact-email">charibeth.cheng@dlsu.edu.ph</span>
+            </div>
+          </div>
+          <div class="institution">
+            <strong>College of Computer Studies</strong><br>
+            De La Salle University, Manila<br>
+            <span class="program">BS Computer Science &mdash; Software Technology</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 6: Front Cover -->
+    <section class="panel panel-6 cover">
+      <div class="cover-background">
+        <div class="gradient-overlay"></div>
+        <div class="geometric-pattern"></div>
+      </div>
+      <div class="cover-content">
+        <div class="cover-top">
+          <h1 class="cover-title">
+            <span class="title-line">Mechanistic</span>
+            <span class="title-line">Interpretability</span>
+            <span class="title-line-small">of Code Correctness in LLMs</span>
+          </h1>
+          <p class="cover-subtitle">via Sparse Autoencoders</p>
+        </div>
+
+        <div class="cover-visual">
+          <svg viewBox="0 0 200 150" class="neural-network">
+            <!-- Input layer -->
+            <circle cx="30" cy="40" r="8" class="node input"/>
+            <circle cx="30" cy="75" r="8" class="node input"/>
+            <circle cx="30" cy="110" r="8" class="node input"/>
+
+            <!-- Hidden layer -->
+            <circle cx="100" cy="30" r="8" class="node hidden"/>
+            <circle cx="100" cy="60" r="8" class="node hidden"/>
+            <circle cx="100" cy="90" r="8" class="node hidden"/>
+            <circle cx="100" cy="120" r="8" class="node hidden"/>
+
+            <!-- Output layer -->
+            <circle cx="170" cy="55" r="8" class="node output"/>
+            <circle cx="170" cy="95" r="8" class="node output"/>
+
+            <!-- Connections (faded) -->
+            <g class="connections">
+              <line x1="38" y1="40" x2="92" y2="30"/>
+              <line x1="38" y1="40" x2="92" y2="60"/>
+              <line x1="38" y1="75" x2="92" y2="60"/>
+              <line x1="38" y1="75" x2="92" y2="90"/>
+              <line x1="38" y1="110" x2="92" y2="90"/>
+              <line x1="38" y1="110" x2="92" y2="120"/>
+              <line x1="108" y1="30" x2="162" y2="55"/>
+              <line x1="108" y1="60" x2="162" y2="55"/>
+              <line x1="108" y1="90" x2="162" y2="95"/>
+              <line x1="108" y1="120" x2="162" y2="95"/>
+            </g>
+
+            <!-- Highlighted path (correctness direction) -->
+            <path d="M 38 75 Q 70 60 92 60 Q 130 60 162 55" class="direction-path" fill="none"/>
+            <text x="100" y="145" class="direction-label">correctness direction</text>
+          </svg>
+        </div>
+
+        <div class="cover-bottom">
+          <p class="author-name">Kriz Tahimic</p>
+          <p class="adviser-name">Adviser: Dr. Charibeth K. Cheng</p>
+          <div class="institution-badge">
+            <span class="college">College of Computer Studies</span>
+            <span class="university">De La Salle University</span>
+          </div>
+          <p class="academic-year">Academic Year 2024&ndash;2025</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

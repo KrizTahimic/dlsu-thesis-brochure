@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+
+# Screenshots (temporary/generated)
+screenshot*.png
+
+# OS files
+.DS_Store
