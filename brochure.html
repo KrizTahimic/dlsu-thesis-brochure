@@ -78,31 +78,60 @@
       <div class="panel-content">
         <h2 class="section-title">Key Discovery</h2>
         <div class="discovery-box">
-          <p><strong>Code correctness directions EXIST</strong> in LLM representations&mdash;and they are <strong>actionable</strong>.</p>
+          <p><strong>Code correctness directions EXIST</strong> in LLM representations, revealing an <strong>asymmetry</strong>.</p>
         </div>
 
-        <h3 class="result-title">1. Predict Errors Before Generation</h3>
-        <p class="small-text">The <strong>incorrect-predicting direction</strong> detects errors with high accuracy:</p>
-        <div class="figure-container">
-          <img src="figures/incorrect-predicting.png" alt="Prediction Results">
-          <p class="figure-caption">F1: 0.821 for error detection&mdash;can serve as "error alarm"</p>
-        </div>
+        <h3 class="subsection-title">Identified Directions</h3>
+        <table class="feature-table">
+          <thead>
+            <tr>
+              <th>Direction</th>
+              <th>Layer</th>
+              <th>Metric</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="success-row">
+              <td>Incorrect Predicting</td>
+              <td>L19</td>
+              <td>t=5.68</td>
+              <td><strong>F1=0.821</strong> &#10003;</td>
+            </tr>
+            <tr class="fail-row">
+              <td>Correct Predicting</td>
+              <td>L16</td>
+              <td>t=5.09</td>
+              <td>F1=0.504 &#10007;</td>
+            </tr>
+            <tr class="success-row">
+              <td>Correct Steering</td>
+              <td>L16</td>
+              <td>sep=0.22</td>
+              <td><strong>4.04%</strong> (p&lt;0.001) &#10003;</td>
+            </tr>
+            <tr class="fail-row">
+              <td>Incorrect Steering</td>
+              <td>L25</td>
+              <td>sep=0.20</td>
+              <td>2.2% &lt; control &#10007;</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="tradeoff-note">*Note: Correct steering also corrupts 14.66% of initially correct code, suggesting selective application.</p>
 
-        <h3 class="result-title">2. Steer Toward Correctness</h3>
-        <p class="small-text">The <strong>correct-steering direction</strong> can fix errors (4.04% of incorrect code fixed).</p>
-
-        <h3 class="result-title">3. Asymmetric Finding</h3>
+        <h3 class="subsection-title">Asymmetric Finding</h3>
         <div class="asymmetry-box">
           <div class="found">
             <span class="label">Found:</span>
-            <span>incorrect-predicting + correct-steering</span>
+            <span>incorrect-predicting & correct-steering</span>
           </div>
           <div class="not-found">
             <span class="label">Not Found:</span>
-            <span>correct-predicting or incorrect-steering</span>
+            <span>correct-predicting & incorrect-steering</span>
           </div>
         </div>
-        <p class="insight-text"><em>Models detect "wrongness" differently than they encode "correctness"</em></p>
+        <p class="insight-text"><em>The asymmetry works in our favor: we can detect errors AND steer toward correctness</em></p>
       </div>
     </section>
   </div>
@@ -116,57 +145,103 @@
         <div class="header-accent"></div>
       </div>
       <div class="panel-content">
-        <h2 class="section-title">Mechanistic Evidence</h2>
+        <h2 class="section-title">Mechanistic Analysis</h2>
 
-        <div class="evidence-grid">
-          <div class="evidence-item">
-            <h4>Prediction Analysis</h4>
-            <ul class="mini-list">
-              <li>Incorrect-predicting: <strong>F1 = 0.821</strong></li>
-              <li>Correct-predicting: F1 = 0.504 (weak)</li>
-            </ul>
+        <h3 class="subsection-title">Attention Analysis</h3>
+        <p class="small-text">Our prompts contain three components:</p>
+        <div class="figure-container full-width">
+          <img src="figures/template.png" alt="Prompt Template" style="width: 100%;">
+        </div>
+        <p class="small-text">Where does the model focus attention when steering activates?</p>
+        <div class="figure-container full-width">
+          <img src="figures/attention_delta_plots.png" alt="Attention Redistribution" style="width: 100%;">
+        </div>
+        <p class="small-text"><strong>Correct-steering</strong> redirects attention to <strong>test cases</strong> (+15%), while incorrect-steering shifts away (-13%). <em>Implication: Prompting should prioritize test examples.</em></p>
+
+        <h3 class="subsection-title">Weight Orthogonalization</h3>
+        <p class="small-text">Is the direction merely correlated, or <strong>necessary</strong>? We surgically remove each from model weights.</p>
+        <div class="ortho-grid">
+          <div class="ortho-item success">
+            <span class="ortho-direction">Correct Steering Removal</span>
+            <span class="ortho-label">CORRUPTION RATE</span>
+            <span class="ortho-value"><strong>83.6%</strong></span>
+            <span class="ortho-note">vs 19% control (4.4&times;) &#10003;</span>
           </div>
-          <div class="evidence-item">
-            <h4>Steering Interventions</h4>
-            <ul class="mini-list">
-              <li>Correct-steering fixes <strong>4.04%</strong> of errors</li>
-              <li>Trade-off: affects 14.66% correct code</li>
-            </ul>
+          <div class="ortho-item fail">
+            <span class="ortho-direction">Incorrect Steering Removal</span>
+            <span class="ortho-label">CORRECTION RATE</span>
+            <span class="ortho-value"><strong>2.2%</strong></span>
+            <span class="ortho-note">&lt; 5.5% control &#10007;</span>
           </div>
         </div>
+        <p class="small-text"><em>Correct-steering is <strong>necessary</strong> for generation; incorrect-steering removal doesn't fix errors (asymmetry confirmed).</em></p>
 
-        <p class="small-text" style="margin-top: 8px;"><strong>Causal validation:</strong> Removing directions causes 83.62% corruption (vs. 18.97% control). Directions persist across instruction-tuning (F1: 0.821→0.772).</p>
+        <h3 class="subsection-title">Persistence Across Fine-tuning</h3>
+        <p class="small-text">Do these directions persist from base to instruction-tuned models?</p>
+        <div class="persistence-grid">
+          <div class="persistence-item">
+            <span class="persistence-label">Incorrect-predicting</span>
+            <span class="persistence-value">F1: 0.821 &rarr; 0.772</span>
+          </div>
+          <div class="persistence-item">
+            <span class="persistence-label">Correct-steering</span>
+            <span class="persistence-value">4.04% &rarr; 2.93% (p&lt;0.001)</span>
+          </div>
+        </div>
+        <p class="small-text"><em>Both directions persist through fine-tuning, confirming these are fundamental mechanisms.</em></p>
       </div>
     </section>
 
-    <!-- Panel 5: Significance & Contact -->
+    <!-- Panel 5: Research Contribution & Contact -->
     <section class="panel panel-5">
       <div class="panel-header teal">
         <div class="header-accent"></div>
       </div>
       <div class="panel-content">
-        <h2 class="section-title">Significance</h2>
-        <div class="first-box">
-          <p><strong>First application</strong> of Sparse Autoencoders to study code correctness mechanisms in LLMs.</p>
+        <h2 class="section-title">Research Contribution</h2>
+        <ul class="contribution-list">
+          <li><strong>First application</strong> of Sparse Autoencoders to mechanistically interpret code correctness in LLMs</li>
+          <li><strong>Adapted</strong> mechanistic interpretability techniques from entity recognition<sup>6</sup> to the code generation domain</li>
+        </ul>
+
+        <h2 class="section-title">Practical Applications</h2>
+
+        <div class="application-item">
+          <h4 class="application-title">1. Error Detection Systems</h4>
+          <ul class="application-details">
+            <li>Integrate incorrect-predicting directions into development workflows</li>
+            <li>Flag AI-generated code before production deployment</li>
+            <li>Implementation: IDE plugins, CI/CD pipeline checks, API services</li>
+          </ul>
         </div>
 
-        <h3 class="subsection-title">Practical Applications</h3>
-        <ol class="applications-list">
-          <li><strong>Prompting strategies:</strong> Prioritize test examples over problem descriptions</li>
-          <li><strong>Error alarms:</strong> Predictor directions flag code for review</li>
-          <li><strong>Selective steering:</strong> Intervene only when errors anticipated</li>
-        </ol>
+        <div class="application-item">
+          <h4 class="application-title">2. Prompting Best Practices</h4>
+          <ul class="application-details">
+            <li>Prioritize test examples over problem descriptions when prompting</li>
+            <li>Invest effort in crafting detailed test cases rather than lengthy descriptions</li>
+            <li>No model retraining required—simple prompt restructuring</li>
+          </ul>
+        </div>
 
-        <p class="small-text"><strong>Safety Implications:</strong> Contributes to safer AI deployment in healthcare, finance, and critical infrastructure.</p>
+        <div class="application-item">
+          <h4 class="application-title">3. Selective Steering Pipeline</h4>
+          <ul class="application-details">
+            <li>Two-stage approach combining prediction and steering</li>
+            <li><strong>Stage 1 - Predict:</strong> Use incorrect-predicting direction (L19-5441) to identify likely errors</li>
+            <li><strong>Stage 2 - Steer:</strong> Apply correct-steering direction (L16-11225) only on flagged samples</li>
+            <li>Avoids corrupting initially correct code through universal steering</li>
+          </ul>
+        </div>
 
-        <h3 class="subsection-title">References</h3>
+        <h2 class="section-title">References</h2>
         <ol class="references-list">
           <li>Dohmke et al. (2023). Sea Change in Software Development: Economic and Productivity Analysis of the AI-Powered Developer Lifecycle.</li>
-          <li>Guo et al. (2025). An Empirical Study on LLM-Generated Bug Analysis.</li>
+          <li>Guo et al. (2025). LLMs are Bug Replicators: An Empirical Study on LLMs' Capability in Completing Bug-prone Code.</li>
           <li>Bricken et al. (2023). Towards Monosemanticity: Decomposing Language Models With Dictionary Learning.</li>
           <li>Templeton et al. (2024). Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet.</li>
-          <li>Lieberum et al. (2024). Gemma Scope: Open Sparse Autoencoders Everywhere All At Once on Gemma 2.</li>
-          <li>Ferrando et al. (2024). A Primer on the Inner Workings of Transformer-based Language Models.</li>
+          <li>Lieberum et al. (2024). Gemma Scope: Open Sparse Autoencoders Everywhere All at Once on Gemma 2.</li>
+          <li>Ferrando et al. (2024). Do I Know This Entity? Knowledge Awareness and Hallucinations in Language Models.</li>
         </ol>
 
         <div class="contact-section">
@@ -182,11 +257,6 @@
               <span class="contact-name">Dr. Charibeth K. Cheng</span>
               <span class="contact-email">charibeth.cheng@dlsu.edu.ph</span>
             </div>
-          </div>
-          <div class="institution">
-            <strong>College of Computer Studies</strong><br>
-            De La Salle University, Manila<br>
-            <span class="program">BS Computer Science &mdash; Software Technology</span>
           </div>
         </div>
       </div>
@@ -252,7 +322,7 @@
             <span class="college">College of Computer Studies</span>
             <span class="university">De La Salle University</span>
           </div>
-          <p class="academic-year">Academic Year 2024&ndash;2025</p>
+          <p class="academic-year">Academic Year 2025&ndash;2026</p>
         </div>
       </div>
     </section>
