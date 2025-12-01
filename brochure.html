@@ -37,10 +37,14 @@
         </ul>
 
         <h2 class="section-title">The Challenge</h2>
-        <p class="small-text"><strong>Polysemantic neurons:</strong> One neuron responds to multiple unrelated concepts</p>
+        <p class="small-text">Understanding LLMs requires analyzing individual neurons—but neurons are <strong>polysemantic</strong>, responding to multiple unrelated concepts like academic citations, English dialogue, HTTP requests, and Korean text.</p>
         <div class="figure-container full-width">
           <img src="figures/polysemantic neuron.png" alt="Polysemantic Neuron" style="width: 100%;">
-          <p class="figure-caption">A polysemantic neuron that responds to academic citations, English dialogue, HTTP requests, and Korean text</p>
+        </div>
+
+        <p class="small-text">A hypothesized cause is <strong>superposition</strong>: networks encode more features than available dimensions. The observed model is a low-dimensional projection of a larger, idealized network where features would be disentangled.</p>
+        <div class="figure-container full-width">
+          <img src="figures/superposition.png" alt="Superposition" style="width: 100%;">
         </div>
       </div>
     </section>
@@ -51,26 +55,17 @@
         <div class="header-accent"></div>
       </div>
       <div class="panel-content">
-        <h2 class="section-title">Why Interpretation is Hard</h2>
-        <p><strong>Superposition:</strong> Networks compress more features than dimensions, entangling representations.</p>
-        <div class="figure-container">
-          <img src="figures/superposition.png" alt="Superposition">
-          <p class="figure-caption">Observed models are low-dimensional projections of larger networks</p>
-        </div>
-
         <h2 class="section-title">Our Approach</h2>
-        <p><strong>Sparse Autoencoders (SAEs)</strong> decompose entangled representations into interpretable directions.</p>
+        <p><strong>Sparse Autoencoders (SAEs)</strong> address superposition by expanding activations into a higher-dimensional sparse space, decomposing entangled representations into interpretable directions.</p>
         <div class="figure-container">
           <img src="figures/sae.png" alt="Sparse Autoencoder">
           <p class="figure-caption">SAE: Activations → sparse latent space → reconstructed activations</p>
         </div>
 
-        <h3 class="subsection-title">Technical Setup</h3>
-        <div class="tech-specs">
-          <div class="spec-item"><span class="spec-label">Model</span><span class="spec-value">Gemma-2 2B</span></div>
-          <div class="spec-item"><span class="spec-label">SAE</span><span class="spec-value">GemmaScope (16K latents)</span></div>
-          <div class="spec-item"><span class="spec-label">Dataset</span><span class="spec-value">MBPP (1K problems)</span></div>
-          <div class="spec-item"><span class="spec-label">Analysis</span><span class="spec-value">All layers, residual stream, final prompt token</span></div>
+        <h2 class="section-title">Methodology Pipeline</h2>
+        <p class="small-text">Using 1,000 Python problems from MBPP, we capture residual stream activations at the final prompt token across all layers, then identify two predicting directions (correct/incorrect, via t-statistics) and two steering directions (correct/incorrect, via separation scores).</p>
+        <div class="figure-container full-width">
+          <img src="figures/methodology.png" alt="PCDGE Methodology" style="width: 100%;">
         </div>
       </div>
     </section>
@@ -122,10 +117,6 @@
       </div>
       <div class="panel-content">
         <h2 class="section-title">Mechanistic Evidence</h2>
-        <div class="figure-container medium">
-          <img src="figures/methodology.png" alt="PCDGE Methodology">
-          <p class="figure-caption">PCDGE pipeline: Dataset preparation → Direction selection → Mechanistic analysis</p>
-        </div>
 
         <div class="evidence-grid">
           <div class="evidence-item">
