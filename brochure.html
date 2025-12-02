@@ -85,53 +85,69 @@
         <table class="feature-table">
           <thead>
             <tr>
+              <th>Name</th>
               <th>Direction</th>
-              <th>Layer</th>
-              <th>Metric</th>
               <th>Result</th>
             </tr>
           </thead>
           <tbody>
             <tr class="success-row">
               <td>Incorrect Predicting</td>
-              <td>L19</td>
-              <td>t=5.68</td>
+              <td>L19-5441</td>
               <td><strong>F1=0.821</strong> &#10003;</td>
             </tr>
             <tr class="fail-row">
               <td>Correct Predicting</td>
-              <td>L16</td>
-              <td>t=5.09</td>
+              <td>L16-14439</td>
               <td>F1=0.504 &#10007;</td>
             </tr>
             <tr class="success-row">
               <td>Correct Steering</td>
-              <td>L16</td>
-              <td>sep=0.22</td>
-              <td><strong>4.04%</strong> (p&lt;0.001) &#10003;</td>
+              <td>L16-11225</td>
+              <td><strong>4.04%</strong> &gt; 0% ctrl (p&lt;0.001) &#10003;</td>
             </tr>
             <tr class="fail-row">
               <td>Incorrect Steering</td>
-              <td>L25</td>
-              <td>sep=0.20</td>
-              <td>2.2% &lt; control &#10007;</td>
+              <td>L25-2853</td>
+              <td>64.66% &lt; 100% ctrl (p=1.0) &#10007;</td>
             </tr>
           </tbody>
         </table>
+
         <p class="tradeoff-note">*Note: Correct steering also corrupts 14.66% of initially correct code, suggesting selective application.</p>
 
-        <h3 class="subsection-title">Asymmetric Finding</h3>
-        <div class="asymmetry-box">
-          <div class="found">
-            <span class="label">Found:</span>
-            <span>incorrect-predicting & correct-steering</span>
-          </div>
-          <div class="not-found">
-            <span class="label">Not Found:</span>
-            <span>correct-predicting & incorrect-steering</span>
+        <p class="insight-text"><em>The asymmetry works in our favor: we can detect errors AND steer toward correctness</em></p>
+
+        <div class="logit-lens-mini">
+          <div class="logit-lens-header">What does Incorrect-Predicting detect?</div>
+          <div class="logit-lens-content">
+            <img src="figures/incorrect-predicting.png" alt="Logit Lens Analysis">
+            <p class="logit-lens-explanation">The incorrect-predicting direction activates strongly on null indicators and foreign language tokens, patterns the model has learned to associate with semantic errors.</p>
           </div>
         </div>
-        <p class="insight-text"><em>The asymmetry works in our favor: we can detect errors AND steer toward correctness</em></p>
+
+        <div class="code-example">
+          <div class="code-example-header">Correct Steering in Action (L16-11225)</div>
+          <p class="code-example-explanation">Despite logit lens showing formatting tokens, steering produces semantic corrections. The <code>dict.fromkeys()</code> one-liner fails to count; steering transforms it into a proper frequency algorithm with explicit iteration.</p>
+          <div class="code-example-content">
+            <div class="code-block before">
+              <span class="code-block-label">Before Steering ✗</span>
+              <pre><span class="keyword">def</span> <span class="function">char_frequency</span>(string):
+  <span class="keyword">return</span> dict.fromkeys(string, 0)</pre>
+            </div>
+            <div class="code-block after">
+              <span class="code-block-label">After Steering ✓</span>
+              <pre><span class="keyword">def</span> <span class="function">char_frequency</span>(string):
+  frequency = {}
+  <span class="keyword">for</span> char <span class="keyword">in</span> string:
+    <span class="keyword">if</span> char <span class="keyword">in</span> frequency:
+      frequency[char] += 1
+    <span class="keyword">else</span>:
+      frequency[char] = 1
+  <span class="keyword">return</span> frequency</pre>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
